@@ -843,7 +843,7 @@ class ExportMenu extends GridView
         if (empty($this->exportRequestParam)) {
             $this->exportRequestParam = 'exportFull_' . $this->options['id'];
         }
-        $path = '@vendor/kartik-v/yii2-export/src/views';
+        $path = '@vendor/hmtvltk2/yii2-export/src/views';
         if (!isset($this->exportColumnsView)) {
             $this->exportColumnsView = "{$path}/_columns";
         }
@@ -1232,9 +1232,9 @@ class ExportMenu extends GridView
         foreach ($this->columns as $key => $column) {
             $isActionColumn = $column instanceof ActionColumn;
             $isNoExport = in_array($key, $this->noExportColumns) || ($this->showColumnSelector && is_array($this->selectedColumns) && !in_array(
-                    $key,
-                    $this->selectedColumns
-                ));
+                $key,
+                $this->selectedColumns
+            ));
             if ($isActionColumn && !$isNoExport) {
                 $this->noExportColumns[] = $key;
             }
