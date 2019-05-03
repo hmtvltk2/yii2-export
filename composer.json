@@ -1,5 +1,5 @@
 {
-    "name": "kartik-v/yii2-export",
+    "name": "hmtvltk2/yii2-export",
     "description": "A library to export server/db data in various formats (e.g. excel, html, pdf, csv etc.)",
     "keywords": [
         "yii2",
@@ -27,7 +27,6 @@
         }
     ],
     "require": {
-        "kartik-v/yii2-dynagrid": ">=1.4.5",
         "kartik-v/yii2-mpdf": ">=1.0",
         "phpoffice/phpspreadsheet": ">=1.0"
     },

@@ -12,7 +12,6 @@ namespace kartik\export;
 use Closure;
 use kartik\base\TranslationTrait;
 use kartik\dialog\Dialog;
-use kartik\dynagrid\Dynagrid;
 use kartik\grid\GridView;
 use PhpOffice\PhpSpreadsheet\Cell\Cell;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
@@ -865,17 +864,17 @@ class ExportMenu extends GridView
             $this->_columnSelectorEnabled = $request->post($this->colSelFlagParam, $this->_columnSelectorEnabled);
             $this->initSelectedColumns();
         }
-        if ($this->dynagrid) {
-            $this->_columnSelectorEnabled = false;
-            $options = $this->dynagridOptions;
-            $options['columns'] = $this->columns;
-            if (!isset($options['storage'])) {
-                $options['storage'] = DynaGrid::TYPE_DB;
-            }
-            $options['gridOptions']['dataProvider'] = $this->dataProvider;
-            $dynagrid = new DynaGrid($options);
-            $this->columns = $dynagrid->getColumns();
-        }
+        // if ($this->dynagrid) {
+        //     $this->_columnSelectorEnabled = false;
+        //     $options = $this->dynagridOptions;
+        //     $options['columns'] = $this->columns;
+        //     if (!isset($options['storage'])) {
+        //         $options['storage'] = DynaGrid::TYPE_DB;
+        //     }
+        //     $options['gridOptions']['dataProvider'] = $this->dataProvider;
+        //     $dynagrid = new DynaGrid($options);
+        //     $this->columns = $dynagrid->getColumns();
+        // }
     }
 
     /**
@@ -936,10 +935,10 @@ class ExportMenu extends GridView
      */
     public function initExport()
     {
-        $this->_provider = clone($this->dataProvider);
+        $this->_provider = clone ($this->dataProvider);
         if ($this->batchSize && $this->_provider->pagination) {
             /** @noinspection PhpUndefinedFieldInspection */
-            $this->_provider->pagination = clone($this->dataProvider->pagination);
+            $this->_provider->pagination = clone ($this->dataProvider->pagination);
             $this->_provider->pagination->pageSize = $this->batchSize;
         } else {
             $this->_provider->pagination = false;
@@ -1232,9 +1231,10 @@ class ExportMenu extends GridView
         $columns = [];
         foreach ($this->columns as $key => $column) {
             $isActionColumn = $column instanceof ActionColumn;
-            $isNoExport = in_array($key, $this->noExportColumns) ||
-                ($this->showColumnSelector && is_array($this->selectedColumns) && !in_array($key,
-                        $this->selectedColumns));
+            $isNoExport = in_array($key, $this->noExportColumns) || ($this->showColumnSelector && is_array($this->selectedColumns) && !in_array(
+                    $key,
+                    $this->selectedColumns
+                ));
             if ($isActionColumn && !$isNoExport) {
                 $this->noExportColumns[] = $key;
             }
@@ -1699,8 +1699,7 @@ class ExportMenu extends GridView
         $selector = [];
         Html::addCssClass($this->columnSelectorOptions, ['btn', $this->getDefaultBtnCss(), 'dropdown-toggle']);
         $header = ArrayHelper::getValue($this->columnSelectorOptions, 'header', Yii::t('kvexport', 'Select Columns'));
-        $this->columnSelectorOptions['header'] = (!isset($header) || $header === false) ? '' :
-            '<li class="dropdown-header">' . $header . '</li><li class="kv-divider"></li>';
+        $this->columnSelectorOptions['header'] = (!isset($header) || $header === false) ? '' : '<li class="dropdown-header">' . $header . '</li><li class="kv-divider"></li>';
         $id = $this->options['id'] . '-cols';
         Html::addCssClass($this->columnSelectorMenuOptions, 'dropdown-menu kv-checkbox-list');
         $this->columnSelectorMenuOptions = array_replace_recursive(
@@ -1999,13 +1998,9 @@ class ExportMenu extends GridView
         foreach ($this->getVisibleColumns() as $column) {
             if ((isset($this->_groupedColumn[$endCol])) && (!is_null($this->_groupedColumn[$endCol]))) {
                 $value = ($column->content === null) ? (method_exists($column, 'getDataCellValue') ?
-                    $this->formatter->format($column->getDataCellValue($model, $key, $index), 'raw') :
-                    $column->renderDataCell($model, $key, $index)) :
-                    call_user_func($column->content, $model, $key, $index, $column);
+                    $this->formatter->format($column->getDataCellValue($model, $key, $index), 'raw') : $column->renderDataCell($model, $key, $index)) : call_user_func($column->content, $model, $key, $index, $column);
                 $nextValue = ($column->content === null) ? (method_exists($column, 'getDataCellValue') ?
-                    $this->formatter->format($column->getDataCellValue($nextModel, $key, $index), 'raw') :
-                    $column->renderDataCell($nextModel, $key, $index)) :
-                    call_user_func($column->content, $nextModel, $key, $index, $column);
+                    $this->formatter->format($column->getDataCellValue($nextModel, $key, $index), 'raw') : $column->renderDataCell($nextModel, $key, $index)) : call_user_func($column->content, $nextModel, $key, $index, $column);
                 if (is_null($this->_groupedColumn[$endCol]['value'])) {
                     $this->_groupedColumn[$endCol]['value'] = $value;
                     $this->_groupedColumn[$endCol]['firstLine'] = $index;
